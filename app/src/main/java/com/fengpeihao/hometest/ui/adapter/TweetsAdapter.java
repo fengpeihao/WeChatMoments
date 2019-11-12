@@ -1,6 +1,7 @@
 package com.fengpeihao.hometest.ui.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -42,11 +43,19 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull TweetsAdapter.ViewHolder viewHolder, int i) {
         TweetsBean tweetsBean = mList.get(i);
+        //设置tweeter头像
         ImageUtil.getInstance().displayRoundPic(tweetsBean.getSender().getAvatar(),viewHolder.ivPortrait,6);
+        //设置tweeter昵称
         viewHolder.tvNick.setText(tweetsBean.getSender().getNick());
         viewHolder.tvContent.setVisibility(TextUtils.isEmpty(tweetsBean.getContent()) ? View.GONE : View.VISIBLE);
+        //设置tweeter内容
         viewHolder.tvContent.setText(tweetsBean.getContent());
+        //设置tweeter图片
         viewHolder.mTweetView.setImageUrls(tweetsBean.getImages());
+        //设置tweeter评论
+        CommentAdapter commentAdapter = new CommentAdapter(tweetsBean.getComments());
+        viewHolder.mRecyclerViewComment.setAdapter(commentAdapter);
+        viewHolder.mRecyclerViewComment.setLayoutManager(new LinearLayoutManager(viewHolder.mRecyclerViewComment.getContext()));
     }
 
     @Override
@@ -63,6 +72,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvContent;
         @BindView(R.id.tweet_view)
         TweetsImageLayout mTweetView;
+        @BindView(R.id.recycler_view_comment)
+        RecyclerView mRecyclerViewComment;
 
         ViewHolder(View view) {
             super(view);
