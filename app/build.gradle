@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+
+def versions = rootProject.ext.versions
+android {
+    compileSdkVersion versions.compileSdkVersion
+    defaultConfig {
+        applicationId versions.applicationId
+        minSdkVersion versions.minSdkVersion
+        targetSdkVersion versions.targetSdkVersion
+        versionCode versions.versionCode
+        versionName versions.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("keys/hometest.jks")
+            storePassword "asdfghjkl"
+            keyAlias "hometest"
+            keyPassword "asdfghjkl"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            debuggable false
+            shrinkResources true
+            zipAlignEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            signingConfig android.buildTypes.release.signingConfig
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+dependencies {
+    def dependencies = rootProject.ext.dependencies
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation dependencies.appcompat_v7
+    implementation dependencies.constraintlayout
+    testImplementation dependencies.junit
+    implementation dependencies.design
+    implementation dependencies.recyclerview
+    implementation dependencies.retrofit
+    implementation dependencies.retrofit_converter_gson
+    implementation dependencies.retrofit_adapter_rxjava2
+    implementation dependencies.okhttp
+    implementation dependencies.okhttp_logging_interceptor
+    implementation dependencies.rxlifecycle
+    implementation dependencies.rxlifecycle_components
+    implementation dependencies.rxandroid
+    implementation dependencies.rxjava
+    implementation dependencies.gson
+    implementation dependencies.butterknife
+    annotationProcessor dependencies.butterknife_compiler
+    implementation dependencies.glide
+    annotationProcessor dependencies.glide_compiler
+    implementation dependencies.glide_integration
+}
