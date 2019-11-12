@@ -53,9 +53,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         //设置tweeter图片
         viewHolder.mTweetView.setImageUrls(tweetsBean.getImages());
         //设置tweeter评论
-        CommentAdapter commentAdapter = new CommentAdapter(tweetsBean.getComments());
-        viewHolder.mRecyclerViewComment.setAdapter(commentAdapter);
-        viewHolder.mRecyclerViewComment.setLayoutManager(new LinearLayoutManager(viewHolder.mRecyclerViewComment.getContext()));
+        if (tweetsBean.getComments() == null || tweetsBean.getComments().size() == 0) {
+            viewHolder.mRecyclerViewComment.setVisibility(View.GONE);
+        } else {
+            viewHolder.mRecyclerViewComment.setVisibility(View.VISIBLE);
+            CommentAdapter commentAdapter = new CommentAdapter(tweetsBean.getComments());
+            viewHolder.mRecyclerViewComment.setAdapter(commentAdapter);
+            viewHolder.mRecyclerViewComment.setLayoutManager(new LinearLayoutManager(viewHolder.mRecyclerViewComment.getContext()));
+        }
     }
 
     @Override
